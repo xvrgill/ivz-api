@@ -45,9 +45,10 @@ class SSScraper:
         # Create relevant unix timestamps
         from_timestamp = self.create_timestamp(int(from_month), int(from_day), int(from_year))
         to_timestamp = self.create_timestamp(int(to_month), int(to_day), int(to_year))
+        workspace_id = os.environ.get("SOCIAL_STUDIO_WORKSPACE_ID")
 
         # Open new tab and sed request to Social Studio API
-        data_url = f"https://p.socialstudio.radian6.com/api/v1/calendaritems?since={from_timestamp}&until={to_timestamp}&workspace_id=a10353d3-e7d5-4637-8698-7107792fd27e&status_types="
+        data_url = f"https://p.socialstudio.radian6.com/api/v1/calendaritems?since={from_timestamp}&until={to_timestamp}&workspace_id={workspace_id}&status_types="
         driver.execute_script(f"window.open('{data_url}');")
 
         # Switch to the window we just opened
