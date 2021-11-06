@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask.json import jsonify
 import requests
+from api.models.air_table_post_schema import AirTablePostSchema
 
 
 collect_air_table_posts = Blueprint("collect_air_table_posts", __name__)
@@ -22,6 +23,12 @@ def store_air_table_posts():
         field_data["id"] = _id
         final_response.append(field_data)
 
-    # TODO: Serialize all posts
+    # final_response
+
+    # Serialize all posts
+    loaded_data = [AirTablePostSchema().load(item) for item in final_response]
+
     # TODO: Add them to database
-    return jsonify(final_response)
+
+    return jsonify(loaded_data)
+    # return jsonify(final_response)
