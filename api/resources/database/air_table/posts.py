@@ -50,3 +50,8 @@ class AirTableDBPosts(Resource):
         }
 
         return response
+
+    # TODO: Add put method that updates these posts in the database instead. Insert many will not update existing identical items
+    # MongoDB's bulk write method could work for this: https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/
+    def put(self):
+        pass
