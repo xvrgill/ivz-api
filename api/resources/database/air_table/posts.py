@@ -1,6 +1,9 @@
 import json
 from flask_restful import Resource
-from flask import request, jsonify
+from flask import request
+from pymongo.operations import UpdateOne
+
+# from pymongo.operations import UpdateOne
 from api import mongo
 from api.models.air_table_post_schema import AirTablePostSchema
 from bson import json_util
@@ -32,26 +35,28 @@ class AirTableDBPosts(Resource):
 
     def post(self):
         """
-        Create multiple Air Table posts within the database
+        Update multiple Air Table posts within the database if they exist.
+        Create new Air Table posts if they do not exist.
         """
 
         request_data = request.get_json()
-        insert_data = [AirTablePostSchema().load(x) for x in request_data]
-        # deserialized = AirTablePostSchema().load(insert_data)
-        result = mongo.db.airTablePosts.insert_many(insert_data)
+        bulk_operations = []
 
-        # Create new response object based on the result
-        # NOTE: Cannot serialize Object of type InsertMany - need to pull out values
-        response = {
-            "acknowledged": result.acknowledged,
-            # Serialize ObjectIDs to valid JSON string
-            # Subsequently load valid JSON into a dictionary
-            "insertedIds": json.loads(json.dumps(result.inserted_ids, default=json_util.default)),
-        }
+        # Create bulk operations
+        for post in request_data:
+            deserialized = AirTablePostSchema().load(post)
+            # Filter(match) by Air Table ID, set new values, enable upsert
+            operation = UpdateOne(
+                {"air_table_id": deserialized["air_table_id"]},
+                update={"$set": {**deserialized}},
+                upsert=True,
+            )
+            bulk_operations.append(operation)
+
+        # Bulk write to collection
+        result = mongo.db.airTablePosts.bulk_write(bulk_operations)
+
+        # NOTE: Cannot serialize Object of type ObjectID - need to serialize then deserialize values
+        response = json.loads(json.dumps(result.bulk_api_result, default=json_util.default))
 
         return response
-
-    # TODO: Add put method that updates these posts in the database instead. Insert many will not update existing identical items
-    # MongoDB's bulk write method could work for this: https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/
-    def put(self):
-        pass
