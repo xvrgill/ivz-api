@@ -1,16 +1,9 @@
 import json
 from helium import *
 import os
-
-# from webdriver_manager.chrome import ChromeDriverManager
-import time
 from datetime import datetime
 
-# from selenium import webdriver
-
-# Install compatable driver
-# webdriver.Chrome(ChromeDriverManager().install())
-
+# Chromedriver path - /Users/xaviergill/opt/anaconda3/envs/ivz_scheduling_api/lib/python3.9/site-packages/helium/_impl
 
 # Class definition for scraper
 class SSScraper:
@@ -27,11 +20,8 @@ class SSScraper:
     # TODO: store credentials in environement variables
     def login(self):
         go_to("https://socialstudio.radian6.com/")
-        time.sleep(1)
         write(os.environ.get("SOCIAL_STUDIO_USER_NAME"), into="Username")
-        time.sleep(1)
         write(os.environ.get("SOCIAL_STUDIO_PASSWORD"), into="Password")
-        time.sleep(2)
         click("Login")
 
     # Generate timestamps from serialized date
@@ -41,7 +31,15 @@ class SSScraper:
         return timestamp
 
     # Get post data based on passed in dates
-    def fetch_posts(self, from_month: str, from_day: str, from_year: str, to_month: str, to_day: str, to_year: str):
+    def fetch_posts(
+        self,
+        from_month: str = 1,
+        from_day: str = 1,
+        from_year: str = 2021,
+        to_month: str = 12,
+        to_day: str = 30,
+        to_year: str = 2021,
+    ):
         # Create relevant unix timestamps
         from_timestamp = self.create_timestamp(int(from_month), int(from_day), int(from_year))
         to_timestamp = self.create_timestamp(int(to_month), int(to_day), int(to_year))

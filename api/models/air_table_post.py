@@ -1,6 +1,3 @@
-import uuid
-
-
 class AirTablePost:
     def __init__(
         self,
