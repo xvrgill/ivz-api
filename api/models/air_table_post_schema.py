@@ -2,6 +2,7 @@ from marshmallow import Schema, fields
 
 
 # TODO: Consider using nested schemas for the fields (everything except for _id and created at)
+# TODO: Add field for linked social studio posts
 class AirTablePostSchema(Schema):
     _id = fields.String()
     air_table_id = fields.Str(data_key="id")
