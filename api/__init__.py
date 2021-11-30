@@ -14,11 +14,13 @@ CORS(app)
 from api.routes.index import index_page
 from api.routes.collect_posts import collect_air_table_posts
 from api.routes.collect_posts import collect_social_studio_posts
+from api.routes.link_posts import create_db_relationships
 
 # Register blueprints
 app.register_blueprint(index_page)
 app.register_blueprint(collect_air_table_posts)
 app.register_blueprint(collect_social_studio_posts)
+app.register_blueprint(create_db_relationships)
 
 # Resource imports
 from api.resources.air_table.air_table_posts import AirTablePosts

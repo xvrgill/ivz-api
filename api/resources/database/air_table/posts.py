@@ -46,6 +46,7 @@ class AirTableDBPosts(Resource):
         for post in request_data:
             deserialized = AirTablePostSchema().load(post)
             # Filter(match) by Air Table ID, set new values, enable upsert
+            # TODO: Need to deserialize id if passed by changing it to an ObjectID()
             operation = UpdateOne(
                 {"air_table_id": deserialized["air_table_id"]},
                 update={"$set": {**deserialized}},
