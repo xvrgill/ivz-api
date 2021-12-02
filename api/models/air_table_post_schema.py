@@ -50,3 +50,4 @@ class AirTablePostSchema(Schema):
     qqq_content_partner = fields.Str(data_key="QQQ: Content Partner")
     instagram_copy = fields.Str(data_key="Instagram Copy")
     social_initiative = fields.Str(data_key="Social: Initiative")
+    linked_social_studio_ids = fields.List(fields.Str)
