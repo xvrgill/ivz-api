@@ -20,11 +20,12 @@ def link():
     ss_cursor: cursor.Cursor = mongo.db.socialStudioPosts.find({})
     ss_posts: list = [json.loads(json.dumps(x, default=json_util.default)) for x in ss_cursor]
 
+    # TODO: Reduce time complexity
+
     # For every post in social studio collection...
     for post in ss_posts:
-        # Turn id into object id
+
         _id: str = post["_id"]["$oid"]
-        # oid: ObjectId = ObjectId(_id)
         ss_copy: str = post["description"]
 
         if ss_copy:
@@ -51,6 +52,7 @@ def link():
                 {
                     "$project": {
                         # "new_social_studio_oid": _id,
+                        # TODO: Output score for more accurate matches
                         # "score": "$score",
                         "air_table_id": "$air_table_record.air_table_id",
                         "linked_social_studio_ids": {
@@ -67,6 +69,7 @@ def link():
             for doc in mongo.db.airTablePosts.aggregate(pipeline):
                 search_result = json.loads(json.dumps(doc, default=json_util.default))
                 if search_result != None:
+                    # TODO: Only do the following if the searchScore is aboove a certain threshold for more accurate matches
                     existing_linked_posts = search_result["linked_social_studio_ids"]
                     search_result["air_table_id"] = search_result["air_table_id"][0]
                     if existing_linked_posts != [None]:
