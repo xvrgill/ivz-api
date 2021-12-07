@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from re import IGNORECASE
+import regex
 
 
 class CopyParser(ABC):
@@ -25,17 +27,19 @@ class LinkedInParser(CopyParser):
         self.post_data: str = (post_data,)
         self.full_copy: str = post_data["LinkedIn/Facebook Copy"]
         self.parsed_copy: str = None
-        self._regex_pattern: str = ""
+        # self._regex_pattern: str = r"(?<=linkedin|linkedin:|linkedin-|linkedin\ ?\n|linkedin copy:|linkedin copy-|linkedin copy\ ?\n)."
+        self._regex_pattern: str = r"(\w?)*-?li-?\w*(\ copy)*(:|-)?\n?\ ?(\(.*\))?\ ?\K.*"
 
     def parse(self) -> str:
-        self.parsed_copy: str = f"{self.full_copy} - parsed"
+        search_result = regex.search(self._regex_pattern, self.full_copy, IGNORECASE)
+        self.parsed_copy: str = search_result[0]
         return self.parsed_copy
 
 
 class TwitterParser(CopyParser):
 
     """
-    Parser for LinkedIn. Parses copy and returns the platform specific substring of the full copy that was passed.
+    Parser for Twitter. Parses copy and returns the platform specific substring of the full copy that was passed.
     """
 
     def __init__(self, full_copy) -> None:
