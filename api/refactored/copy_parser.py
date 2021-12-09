@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
-from re import IGNORECASE
+from re import IGNORECASE, MULTILINE
 import regex
+
+# Exceptions
+from api.refactored.exceptions import EmptyLinkedinFacebookCopyError, RegexPatternResultError
 
 
 class CopyParser(ABC):
@@ -24,15 +27,27 @@ class LinkedInParser(CopyParser):
     """
 
     def __init__(self, post_data) -> None:
-        self.post_data: str = (post_data,)
-        self.full_copy: str = post_data["LinkedIn/Facebook Copy"]
+        self.post_data: str = post_data
+        try:
+            self.full_copy: str = post_data["LinkedIn/Facebook Copy"]
+        except:
+            raise EmptyLinkedinFacebookCopyError(post_data)
         self.parsed_copy: str = None
-        # self._regex_pattern: str = r"(?<=linkedin|linkedin:|linkedin-|linkedin\ ?\n|linkedin copy:|linkedin copy-|linkedin copy\ ?\n)."
-        self._regex_pattern: str = r"(\w?)*-?li-?\w*(\ copy)*(:|-)?\n?\ ?(\(.*\))?\ ?\K.*"
+        self.if_pattern: str = r"(?(?=(li[:\-\n]+)|linkedin)((\w?)*-?li-?\w*(\ copy)*(:|-)?\n?\ ?(\(.*\))?\ ?\K(?P<licopy>.*)))"
+        self.elif_pattern: str = r"(fb|ig|facebook|instagram):?-?\ ?\n?\K.*"
 
     def parse(self) -> str:
-        search_result = regex.search(self._regex_pattern, self.full_copy, IGNORECASE)
-        self.parsed_copy: str = search_result[0]
+        if_result = regex.search(self.if_pattern, self.full_copy, IGNORECASE)[0]
+        if if_result != "":
+            # Pass parsed LI copy if found
+            self.parsed_copy: str = if_result
+        elif len(regex.search(self.elif_pattern, self.full_copy, IGNORECASE)[0]) != 0:
+            # Raise exception when non-target platform copy is found
+            raise RegexPatternResultError(self.full_copy)
+        else:
+            # Parsed copy is the full copy (no distinction made between platforms)
+            self.parsed_copy = self.full_copy
+
         return self.parsed_copy
 
 

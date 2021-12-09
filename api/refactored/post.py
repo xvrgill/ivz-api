@@ -20,7 +20,7 @@ class SocialStudioPostContext:
 # Test function
 def main() -> str:
     test_data = {
-        "LinkedIn/Facebook Copy": "IVZ-LI-IDI0610aa: (InvescoUS) The lessons NCAA Legend and Invesco QQQ Agent of Innovation Grant Hill learned during his basketball career have transferred into the business world and through to his personal life. Watch his full conversation with 15-year-old CEO Trey Brown:  Agents of Innovation: Grant Hill & Trey Brown."
+        "LinkedIn/Facebook Copy": "The research, effort, and development invested by [TAG] Moderna into mRNA technology extends far beyond the integral inclusion in the COVID-19 vaccine. Learn more about how this #AgentofInnovation is driving its purpose through technology.\nFacebook: Moderna’s role in pioneering the mRNA technology, which was integral to the COVID-19 vaccine, helped change lives. Their investment in that technology extends far beyond the pandemic and it could potentially be groundbreaking in confronting disease as a whole.\nIG: You may know them for their role in pioneering the mRNA technology that drives the COVID-19 vaccine, but @Moderna is also investing in innovative technology that is changing lives. Link in bio to learn more through our Innovation Realized series."
     }
     _strategy = LinkedInStrategy()
     context = SocialStudioPostContext(test_data, _strategy)
