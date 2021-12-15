@@ -1,9 +1,9 @@
 from typing import Dict
 from api.refactored.copy_parser import (
     LinkedInParser,
-    TwitterParser,
-    FacebookParser,
-    InstagramParser,
+    # TwitterParser,
+    # FacebookParser,
+    # InstagramParser,
 )
 from abc import ABC, abstractmethod
 
@@ -13,13 +13,13 @@ class Strategy(ABC):
     def parse_copy(self):
         pass
 
-    @abstractmethod
-    def add_to_db(self):
-        pass
+    # @abstractmethod
+    # def add_to_db(self):
+    #     pass
 
-    @abstractmethod
-    def add_to_socialstudio(self):
-        pass
+    # @abstractmethod
+    # def add_to_socialstudio(self):
+    #     pass
 
 
 class LinkedInStrategy(Strategy):
@@ -32,59 +32,62 @@ class LinkedInStrategy(Strategy):
 
         return parsed
 
-    def add_to_db(self):
-        pass
+    # def add_to_db(self):
+    #     pass
 
-    def add_to_socialstudio(self):
-        pass
+    # def add_to_socialstudio(self):
+    #     pass
 
 
 class TwitterStrategy(Strategy):
-    def parse_copy(self, full_copy: str) -> str:
-        """
-        Returns parsed copy for LinkedIn.
-        """
-        parser: TwitterParser = TwitterParser()
-        parsed = parser.parse(full_copy)
+    # def parse_copy(self, full_copy: str) -> str:
+    #     """
+    #     Returns parsed copy for LinkedIn.
+    #     """
+    #     parser: TwitterParser = TwitterParser()
+    #     parsed = parser.parse(full_copy)
 
-        return parsed
+    #     return parsed
 
-    def add_to_db(self):
-        pass
+    # def add_to_db(self):
+    #     pass
 
-    def add_to_socialstudio(self):
-        pass
+    # def add_to_socialstudio(self):
+    #     pass
+    pass
 
 
 class FacebookStrategy(Strategy):
-    def parse_copy(self, full_copy: str) -> str:
-        """
-        Returns parsed copy for LinkedIn.
-        """
-        parser: FacebookParser = FacebookParser()
-        parsed = parser.parse(full_copy)
+    # def parse_copy(self, full_copy: str) -> str:
+    #     """
+    #     Returns parsed copy for LinkedIn.
+    #     """
+    #     parser: FacebookParser = FacebookParser()
+    #     parsed = parser.parse(full_copy)
 
-        return parsed
+    #     return parsed
 
-    def add_to_db(self):
-        pass
+    # def add_to_db(self):
+    #     pass
 
-    def add_to_socialstudio(self):
-        pass
+    # def add_to_socialstudio(self):
+    #     pass
+    pass
 
 
 class InstagramStrategy(Strategy):
-    def parse_copy(self, full_copy: str) -> str:
-        """
-        Returns parsed copy for LinkedIn.
-        """
-        parser: InstagramParser = InstagramParser()
-        parsed = parser.parse(full_copy)
+    # def parse_copy(self, full_copy: str) -> str:
+    #     """
+    #     Returns parsed copy for LinkedIn.
+    #     """
+    #     parser: InstagramParser = InstagramParser()
+    #     parsed = parser.parse(full_copy)
 
-        return parsed
+    #     return parsed
 
-    def add_to_db(self):
-        pass
+    # def add_to_db(self):
+    #     pass
 
-    def add_to_socialstudio(self):
-        pass
+    # def add_to_socialstudio(self):
+    #     pass
+    pass

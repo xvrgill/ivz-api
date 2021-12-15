@@ -6,7 +6,7 @@ basedir = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(basedir, ".env"))
 
 
-class Config:
+class DevelopmentConfig:
     # Set config variables
     # FLASK_APP = "api"
     # FLASK_ENV = "development"
@@ -26,3 +26,8 @@ class Config:
     # AWS Secrets
     # AWS_SECRET_KEY = environ.get("AWS_SECRET_KEY")
     # AWS_KEY_ID = environ.get("AWS_KEY_ID")
+
+
+# Production Configuration
+class ProductionConfig:
+    pass

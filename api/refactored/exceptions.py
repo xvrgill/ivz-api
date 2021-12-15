@@ -41,8 +41,38 @@ class RegexPatternResultError(CopyParserError):
     def __init__(
         self,
         full_copy,
-        message: str = "Unexpected error in regex pattern. No copy found for target platform, but copy for non-target platform was found. Check associated copy feild in Air Table. Copy in this field must include two letter abreviation or full platfom name (not case sensitive) followed by any of the following: colon, hyphen, or enter\n",
+        message: str = "\n\nUnexpected error in regex pattern. No copy found for target platform, but copy for non-target platform was found. Check associated copy feild in Air Table. Copy in this field must include two letter abreviation or full platfom name (not case sensitive) followed by any of the following: colon, hyphen, or enter\n",
     ) -> None:
         self.full_copy = full_copy
+        self.message = message
+        super().__init__(self.message)
+
+
+### Strategy Exceptions ###
+class PlatformStrategyError(Exception):
+    """
+    Base class for platform specific strategy exceptions
+    """
+
+    pass
+
+
+class StrategyNotSupportedError(PlatformStrategyError):
+    """
+    Exception raised when strategy assignment based on platform - passed as a string - does not map to a strategy class.
+
+    Purpose: Platform was passed that is not currently supported
+
+    Attributes:
+        platform -- platform that was passed to the post context
+        message -- explanation of error
+    """
+
+    def __init__(
+        self,
+        platform,
+        message: str = "\n\nPlatform not supported. No strategy available for passed platform.\n",
+    ) -> None:
+        self.platform = platform
         self.message = message
         super().__init__(self.message)

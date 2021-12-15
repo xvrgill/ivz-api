@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from re import IGNORECASE, MULTILINE
+from re import IGNORECASE
 import regex
 
 # Exceptions
-from api.refactored.exceptions import EmptyLinkedinFacebookCopyError, RegexPatternResultError
+from api.refactored.exceptions import RegexPatternResultError
 
 
 class CopyParser(ABC):
@@ -28,27 +28,40 @@ class LinkedInParser(CopyParser):
 
     def __init__(self, post_data) -> None:
         self.post_data: str = post_data
-        try:
-            self.full_copy: str = post_data["LinkedIn/Facebook Copy"]
-        except:
-            raise EmptyLinkedinFacebookCopyError(post_data)
-        self.parsed_copy: str = None
-        self.if_pattern: str = r"(?(?=(li[:\-\n]+)|linkedin)((\w?)*-?li-?\w*(\ copy)*(:|-)?\n?\ ?(\(.*\))?\ ?\K(?P<licopy>.*)))"
-        self.elif_pattern: str = r"(fb|ig|facebook|instagram):?-?\ ?\n?\K.*"
 
     def parse(self) -> str:
-        if_result = regex.search(self.if_pattern, self.full_copy, IGNORECASE)[0]
-        if if_result != "":
-            # Pass parsed LI copy if found
-            self.parsed_copy: str = if_result
-        elif len(regex.search(self.elif_pattern, self.full_copy, IGNORECASE)[0]) != 0:
-            # Raise exception when non-target platform copy is found
-            raise RegexPatternResultError(self.full_copy)
-        else:
-            # Parsed copy is the full copy (no distinction made between platforms)
-            self.parsed_copy = self.full_copy
+        # TODO: Need to filter out thought leader linkedin posts
+        # TODO: Need error out if linkedin/facebook copy is blank
 
-        return self.parsed_copy
+        full_copy = self.post_data["linkedin_facebook_copy"]
+
+        linkedin_identifier_pattern = r"\bli\b|linkedin(\ copy)?[/\w:\-\n]*"
+        p1 = regex.compile(linkedin_identifier_pattern, IGNORECASE)
+        m1 = p1.search(full_copy)
+
+        target_pattern = r"(((\w*-?\bli\b-?\w*)|linkedin)(\ copy)?[/\w]*[\n\ ]?(\(.*\))?[:\-]?\ ?\K(?P<licopy>.*))"
+        p2 = regex.compile(target_pattern, IGNORECASE)
+        m2 = p2.search(full_copy)
+
+        nontarget_pattern = r"(\bfb\b|\big\b|(hr?sy)|facebook|instagram|hearsay):?-?\ ?\n?"
+        p3 = regex.compile(nontarget_pattern, IGNORECASE)
+        m3 = p3.search(full_copy)
+
+        if m1 and m2:
+            return m2.group()
+        elif m1 and not m2:
+            raise RegexPatternResultError(
+                full_copy,
+                "Linkedin copy found but could not be parsed. Issue with regex pattern likely.",
+            )
+        elif m3:
+            raise RegexPatternResultError(
+                full_copy,
+                "Linkedin copy not found, but nontarget platfom copy found. Specify linkedin copy in Air Table.",
+            )
+        else:
+            # TODO: Need to separate out various posts here (eg. Post 1, Post 2, Post 3...)
+            return full_copy
 
 
 class TwitterParser(CopyParser):
@@ -57,14 +70,7 @@ class TwitterParser(CopyParser):
     Parser for Twitter. Parses copy and returns the platform specific substring of the full copy that was passed.
     """
 
-    def __init__(self, full_copy) -> None:
-        self.full_copy: str = full_copy
-        self.parsed_copy: str = None
-        self._regex_pattern: str = ""
-
-    def parse(self) -> str:
-        # Should return parsed copy as string
-        pass
+    pass
 
 
 class FacebookParser(CopyParser):
@@ -73,14 +79,7 @@ class FacebookParser(CopyParser):
     Parser for Facebook. Parses copy and returns the platform specific substring of the full copy that was passed.
     """
 
-    def __init__(self, full_copy) -> None:
-        self.full_copy: str = full_copy
-        self.parsed_copy: str = None
-        self._regex_pattern: str = ""
-
-    def parse(self) -> str:
-        # Should return parsed copy as string
-        pass
+    pass
 
 
 class InstagramParser(CopyParser):
@@ -89,11 +88,4 @@ class InstagramParser(CopyParser):
     Parser for Instagram. Parses copy and returns the platform specific substring of the full copy that was passed.
     """
 
-    def __init__(self, full_copy) -> None:
-        self.full_copy: str = full_copy
-        self.parsed_copy: str = None
-        self._regex_pattern: str = ""
-
-    def parse(self) -> str:
-        # Should return parsed copy as string
-        pass
+    pass
