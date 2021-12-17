@@ -1,5 +1,5 @@
 from api.refactored.exceptions import StrategyNotSupportedError
-from api.refactored.strategy import LinkedInStrategy
+from api.refactored.strategies.platform_strategy import LinkedInStrategy
 
 
 class SocialStudioPostContext:

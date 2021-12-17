@@ -13,6 +13,10 @@ class Strategy(ABC):
     def parse_copy(self):
         pass
 
+    @abstractmethod
+    def find_image(self):
+        pass
+
     # @abstractmethod
     # def add_to_db(self):
     #     pass
@@ -32,9 +36,25 @@ class LinkedInStrategy(Strategy):
 
         return parsed
 
+    def find_image(self):
+        """
+        Method gets a singular image from air that is most likely to be associated with a LinkedIn post using regex.
+
+        Sudo Code:
+        Extract image list from passed data
+        Loop through list to find li or linkedin in the image title
+        If no linkedin titled image is found, look for dimensions of 1920x1080
+        If those dimensions aren't found, look for dimensions of 1200x627
+        When any of the above conditions are met proceed by passing the index, if none are found raise error
+        """
+
+        pass
+
+    # TODO: Implement a method that adds the post data to database for later retrieval
     # def add_to_db(self):
     #     pass
 
+    # TODO: Implement a method that creates a linkedin post in social studio. Pass in the data and use scraper.
     # def add_to_socialstudio(self):
     #     pass
 

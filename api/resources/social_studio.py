@@ -52,7 +52,8 @@ class SocialStudio(Resource):
             raise ValueError("No social channel(s) selected in Air Table")
 
         social_channel_list = [x.lower() for x in deserialized_data["social_channel"]]
-        # # TODO: Create logic that enables the use of different brand strategies for each platform (eg. US Retail, CA Retail, US Institutional)
+
+        # TODO: Create logic that enables the use of different brand strategies for each platform (eg. US Retail, CA Retail, US Institutional)
         if "linkedin" in social_channel_list:
             try:
                 ssc = SocialStudioPostContext(deserialized_data, "linkedin")
