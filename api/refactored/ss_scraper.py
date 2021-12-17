@@ -4,6 +4,7 @@ from api.refactored.strategies.scraper_strategy import LinkedinSSScraperStrategy
 
 # Chromedriver path - /Users/xaviergill/opt/anaconda3/envs/ivz_scheduling_api/lib/python3.9/site-packages/helium/_impl
 
+# IMPORTANT: MAY NOT NEED THESE STRATEGIES BECAUSE THE PLATFORM STRATEGY CAN IMPLEMENT THIS LOGIC. KEEPING HERE FOR LATER
 # Dict to hold strategy mappings
 strategy_mapping = dict(linkedin=lss)
 
