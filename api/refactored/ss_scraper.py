@@ -52,8 +52,8 @@ if __name__ == "__main__":
     post_data = {
         "platform": "linkedin",
         "post_to": "invesco us",
-        "parsed_copy": "This is a test piece of copy.",
-        "image_path": os.path.abspath("images/biden-michigan-ap-rc-200909_hpMain_16x9_1600.jpg"),
+        "parsed_copy": "This is a test piece of copy 2.",
+        "image_path": "images/biden-michigan-ap-rc-200909_hpMain_16x9_1600.jpg",
     }
 
     scraper = SSScraper(post_data, "linkedin")

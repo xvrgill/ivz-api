@@ -86,7 +86,7 @@ class LinkedinSSScraperStrategy(SSScraperStrategy):
         """
         Compose post with passed post data.
         """
-        # Navigate to compose page
+
         go_to(
             "https://p.socialstudio.radian6.com/publish/w/a10353d3-e7d5-4637-8698-7107792fd27e/compose/#linkedin"
         )
@@ -100,7 +100,7 @@ class LinkedinSSScraperStrategy(SSScraperStrategy):
         wait_until(Text("Invesco US").exists)
         click(invesco_us_profile)
         press(TAB)
-        write("This is a test", into="Content")
+        write(data["parsed_copy"], into="Content")
         image_path: str = data["image_path"]
         upload_image = driver.find_element(
             By.XPATH,
@@ -129,11 +129,15 @@ class LinkedinSSScraperStrategy(SSScraperStrategy):
         sleep(1)
         select(ComboBox(below="Link Shortening"), "Do Not Shorten")
         sleep(3)
+
         # Create post as draft by default
         if as_draft:
             click("Save as a Draft")
 
         # TODO: Return the draft ID if succesful for storage in database
-        # Draft url structure:
-        # https://p.socialstudio.radian6.com/publish/w/a10353d3-e7d5-4637-8698-7107792fd27e/compose/#linkedin/4c717566-3cdd-4045-aeed-0cb852ee4823
-        # Get this by using driver.current_url
+        new_draft_card = S("//html/body/section[6]/div[2]/div[1]/div[2]/div/div[2]")
+        click(new_draft_card)
+        current_url: str = str(driver.current_url)
+        url_split: list = current_url.split("/")
+        draft_id: str = url_split.pop()
+        print(draft_id)
