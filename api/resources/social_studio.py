@@ -69,7 +69,7 @@ class SocialStudio(Resource):
         else:
             try:
                 raise ValueError()
-            except ValueError as e:
+            except ValueError:
                 abort(
                     400, message="linkedin not included in social channels selection in Air Table"
                 )
