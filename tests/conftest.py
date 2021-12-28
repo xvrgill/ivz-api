@@ -1,11 +1,15 @@
 import pytest
 from api import app
+from flask import current_app
 
 # Test client used for functional tests
 @pytest.fixture
 def client():
     with app.test_client() as client:
-        return client
+        with app.app_context():
+            current_app.config.update({"TESTING": True})
+            assert current_app.config["TESTING"] == True
+            yield client
 
 
 @pytest.fixture(scope="class")
