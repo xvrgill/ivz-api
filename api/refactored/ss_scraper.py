@@ -10,10 +10,8 @@ strategy_mapping = dict(linkedin=lss())
 
 # Class definition for scraper
 class SSScraper:
-    def __init__(
-        self, post_data: dict, platform: str, strategy_mapping: dict = strategy_mapping
-    ) -> None:
-        self.post_data = post_data
+    def __init__(self, compose_data: dict, platform: str, strategy_mapping: dict = strategy_mapping) -> None:
+        self.compose_data = compose_data
         self.strategy_mapping = strategy_mapping
         self.platform = platform
         self.strategy = self.assign_strategy()
@@ -34,8 +32,7 @@ class SSScraper:
         """
         Create a post in social studio depending on the data that was passed in.
         """
-        compose_data: dict = self.post_data
-        self.strategy.compose_post(compose_data, as_draft=as_draft)
+        return self.strategy.compose_post(self.compose_data, as_draft=as_draft)
 
     def open_in_new_tab(self, url: str = "") -> None:
         self.strategy.open_in_new_tab(url)
@@ -50,9 +47,7 @@ class SSScraper:
 if __name__ == "__main__":
 
     post_data = {
-        "platform": "linkedin",
-        "post_to": "invesco us",
-        "parsed_copy": "This is a test piece of copy 2.",
+        "parsed_copy": "This is a test piece of copy 2",
         "image_path": "images/biden-michigan-ap-rc-200909_hpMain_16x9_1600.jpg",
     }
 

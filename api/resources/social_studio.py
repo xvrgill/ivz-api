@@ -29,9 +29,7 @@ class SocialStudio(Resource):
         serialized_result = schema.dumps(deserialized_result)
 
         # Pass data to post method to add to social studio
-        post_response = requests.post(
-            f"{request.url_root}socialstudio/post/{id}", json=serialized_result
-        )
+        post_response = requests.post(f"{request.url_root}socialstudio/post/{id}", json=serialized_result)
 
         return post_response.json()
 
@@ -43,11 +41,11 @@ class SocialStudio(Resource):
 
         # Implement social studio context
         data = request.json
-        schema = AirTablePostSchema()
+        schema: AirTablePostSchema = AirTablePostSchema()
         deserialized_data = schema.loads(data)
-        response_data = {"posts_created": 0, "created_posts": {}}
+        response_data: dict = {"posts_created": 0, "created_posts": {}}
 
-        if len(deserialized_data["social_channel"]) <= 0:
+        if len(deserialized_data["social_channel"]) < 1:
             # Raise error
             raise ValueError("No social channel(s) selected in Air Table")
 
@@ -56,11 +54,17 @@ class SocialStudio(Resource):
         # TODO: Create logic that enables the use of different brand strategies for each platform (eg. US Retail, CA Retail, US Institutional)
         if "linkedin" in social_channel_list:
             try:
+                # Initialize post context. Pass deserialized data and platform as string
                 ssc = SocialStudioPostContext(deserialized_data, "linkedin")
-                parsed_copy = ssc.parse_copy()
+                # Run context processing and store return values to add to final response
+                parsed_copy, image_path, draft_id = ssc.run()
+
+                # Assemble response to be passed back to the client
                 response_data["posts_created"] += 1
-                response_details = {"US Retail": {"Copy": parsed_copy}}
+                response_details: dict = {"us retail": {"copy": parsed_copy, "image_path": image_path, "draft_id": draft_id}}
                 response_data["created_posts"].update({"linkedin": [response_details]})
+
+            #  Handle lower level errors
             except RegexPatternResultError as e:
                 abort(422, error=f"{e.message}")
             except StrategyNotSupportedError as e:
@@ -70,6 +74,4 @@ class SocialStudio(Resource):
             try:
                 raise ValueError()
             except ValueError:
-                abort(
-                    400, message="linkedin not included in social channels selection in Air Table"
-                )
+                abort(400, message="linkedin not included in social channels selection in Air Table")
