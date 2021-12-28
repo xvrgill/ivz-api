@@ -10,7 +10,7 @@ class DevelopmentConfig:
     # Set config variables
     # FLASK_APP = "api"
     # FLASK_ENV = "development"
-    # TESTING = True
+    TESTING = True
     SECRET_KEY = environ.get("SECRET_KEY")
     # STATIC_FOLDER = "static"
     # TEMPLATES_FOLDER = "templates"

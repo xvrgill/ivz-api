@@ -17,7 +17,9 @@ CORS(app)
 
 
 # Resource imports
+from api.resources.index import Index
 from api.resources.social_studio import SocialStudio
 
 # Resource definitions
+api.add_resource(Index, "/index")
 api.add_resource(SocialStudio, "/socialstudio/post/<string:id>")
