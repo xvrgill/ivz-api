@@ -69,16 +69,25 @@ class LinkedInStrategy(Strategy):
         # Dimensions check loop
         for image in image_list:
             image_width: str = image["width"]
-            if image_width == "1920":
+            if image_width == 1920:
                 # TODO: Ensure image has a proper file extension (jpg or png)
                 return image
 
         # Fallback dimensions search loop
         for image in image_list:
             image_width: str = image["width"]
-            if image_width == "1200":
+            if image_width == 1200:
                 # TODO: Ensure image has a proper file extension (jpg or png)
                 return image
+
+        # Raise error if none of the above conditions are met
+        raise ValueError(
+            """Image does not contain reference to linkedin or proper image dimensions.
+
+            Image filename must contain either 'li' or 'linkedin'.
+            If filename does not contain the above substrings, the image width must be either 1920 or 1200. Width must be int.
+            """
+        )
 
     def cache_image(self, post_data: dict, cache_dir: str = "images"):
         """

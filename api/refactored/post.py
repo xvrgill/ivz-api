@@ -52,17 +52,4 @@ class SocialStudioPostContext:
 
 
 if __name__ == "__main__":
-    # Test function
-    def main() -> str:
-        test_data = {
-            "linkedin_facebook_copy": """LinkedIn: Who said financial education can't be fun? How Not To Suck At Money is a free interactive game to help step up students' money decision skills, and it's launching November 8th. Sign up now: HNTSAM.com #HowNotToSuckAtMoney
-
-Facebook: Who said financial education can't be fun? We're launching a free interactive game to help college students make better money-managing decisions and have fun while doing it. Launching November 8th. Sign up now: HNTSAM.com #HowNotToSuckAtMoney
-
-Instagram: How Not To Suck At Money is backed by real research and real lessons to help college students get smarter about their money today. Our free interactive game helps students make better money decisions. Launching November 8th. Sign up now. Link in bio. #HowNotToSuckAtMoney"""
-        }
-        context = SocialStudioPostContext(test_data, "linkedin")
-        parsed = context.parse_copy()
-        print(parsed)
-
-    main()
+    pass
