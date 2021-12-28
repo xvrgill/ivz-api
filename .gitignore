@@ -45,7 +45,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
-tests/
+# tests/    <--- Including tests in repository
 
 # Flask stuff:
 instance/
