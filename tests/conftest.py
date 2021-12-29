@@ -14,11 +14,6 @@ def client():
 
 @pytest.fixture(scope="class")
 def test_data():
-    """
-    Dummy deserialized data for use in testing platform specific strategies.
-
-    Module path: api/refactored/strategies/platform_strategy.py
-    """
     # Data contains all proper key value pairs. Should pass tests as is.
     passing_post_data = {
         "_id": "12893468fjdi9283",
@@ -45,7 +40,6 @@ def test_data():
         "social_date_1": "2021-05-21",
         "social_channel": ["Facebook", "Twitter", "Instagram", "Hearsay"],
     }
-
     # Data contains no reference to linkedin in filename and incorrect type for image width. Should raise value error.
     failing_post_data = {
         "_id": "12893468fjdi9283",
