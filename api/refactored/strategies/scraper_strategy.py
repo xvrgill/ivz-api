@@ -79,6 +79,9 @@ class LinkedinSSScraperStrategy(SSScraperStrategy):
         """
         Compose post with passed post data.
         """
+
+        # TODO: Handle links when they are present in the copy
+
         ### Variables ###
         image_path: str = compose_data["image_path"]
 
@@ -98,6 +101,10 @@ class LinkedinSSScraperStrategy(SSScraperStrategy):
         click(invesco_us_profile)
         press(TAB)
         write(compose_data["parsed_copy"], into="Content")
+        # Wait a few seconds
+        # If link editor element is present...
+        # Add image to link element
+        # Modify link title
         upload_image.send_keys(os.path.abspath(image_path))
         wait_until(Text("Please be advised that the files you have uploaded will be available across the tenant").exists)
         click(deployment_box)

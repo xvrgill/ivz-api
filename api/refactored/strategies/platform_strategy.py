@@ -116,7 +116,6 @@ class LinkedInStrategy(Strategy):
     # def add_to_db(self):
     #     pass
 
-    # TODO: Implement a method that creates a linkedin post in social studio. Pass in the data and use scraper.
     def add_to_socialstudio(self, compose_data: dict) -> str:
         scraper = SSScraper(compose_data, "linkedin")
         scraper.open_chrome()
