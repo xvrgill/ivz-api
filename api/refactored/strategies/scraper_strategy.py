@@ -81,56 +81,69 @@ class LinkedinSSScraperStrategy(SSScraperStrategy):
         """
 
         # TODO: Handle links when they are present in the copy
-
-        ### Variables ###
-        image_path: str = compose_data["image_path"]
-
-        ### Selectors ###
-        post_to_field = S("//html/body/section[4]/div/div[2]/div[1]/div/div[1]/div/div[2]/div")
-        invesco_us_profile = S("//html/body/section[4]/div/div[2]/div[1]/div/div[1]/div/div[2]/div/ul/li[3]")
-        upload_image = driver.find_element(By.XPATH, "//html/body/section[4]/div/div[2]/div[1]/div/div[2]/div[2]/div[3]/div/div/form/input")
-        deployment_box = S("//html/body/section[4]/div/div[2]/div[1]/div/div[5]/div/div/div[1]/div")
-        schedule_from_ss_selection = S("//html/body/div[12]/div[2]/ul/li[2]")
-        new_draft_card = S("//html/body/section[6]/div[2]/div[1]/div[2]/div/div[2]")
-
-        ### Actions ###
         go_to("https://p.socialstudio.radian6.com/publish/w/a10353d3-e7d5-4637-8698-7107792fd27e/compose/#linkedin")
         sleep(1)
+        post_to_field = S("//html/body/section[4]/div/div[2]/div[1]/div/div[1]/div/div[2]/div")
         click(post_to_field)
         wait_until(Text("Invesco US").exists)
+        invesco_us_profile = S("//html/body/section[4]/div/div[2]/div[1]/div/div[1]/div/div[2]/div/ul/li[3]")
         click(invesco_us_profile)
         press(TAB)
         write(compose_data["parsed_copy"], into="Content")
-        # Wait a few seconds
-        # If link editor element is present...
-        # Add image to link element
-        # Modify link title
-        upload_image.send_keys(os.path.abspath(image_path))
-        wait_until(Text("Please be advised that the files you have uploaded will be available across the tenant").exists)
-        click(deployment_box)
-        sleep(0.5)
-        click(schedule_from_ss_selection)
-        sleep(1)
-        # TODO: Make sure that passed date is in the future
-        write("12/30/2021", into=S("//html/body/section[4]/div/div[2]/div[1]/div/div[5]/div/div/div[2]/div/input"))
-        press(ESCAPE)
-        sleep(1)
-        # TODO: Make sure that passed time is in the future if the passed date is today
-        write("03:00 am", into=S("//html/body/section[4]/div/div[2]/div[1]/div/div[5]/div/div/div[2]/div/span/input"))
-        press(ESCAPE)
-        sleep(1)
-        select(ComboBox(below="Link Shortening"), "Do Not Shorten")
         sleep(3)
+        # Handle image differently depending on if the content box has a link or not
+        if Text("Headline").exists():
+            upload_image = driver.find_element(By.XPATH, "/html/body/section[4]/div/div[2]/div[1]/div/div[3]/div/div[3]/div/div[4]/div[2]/div/div[2]/div[2]/div/form/input")
+            image_path: str = compose_data["image_path"]
+            upload_image.send_keys(os.path.abspath(image_path))
+            # Image check mark
+            wait_until(lambda: S("//html/body/section[4]/div/div[2]/div[1]/div/div[3]/div/div[3]/div/div[4]/div[2]/div/div[1]/div/div[1]/i").exists())
+            deployment_box = S("//html/body/section[4]/div/div[2]/div[1]/div/div[5]/div/div/div[1]")
+            click(deployment_box)
+            sleep(0.5)
+            schedule_from_ss_selection = S("//html/body/div[8]/div[2]/ul/li[2]")
+            click(schedule_from_ss_selection)
+            sleep(1)
+            # TODO: Make sure that passed date is in the future
+            write("01/02/2022", into=S("//html/body/section[4]/div/div[2]/div[1]/div/div[5]/div/div/div[2]/div/input"))
+            press(ESCAPE)
+            sleep(1)
+            # TODO: Make sure that passed time is in the future if the passed date is today
+            write("03:00 am", into=S("//html/body/section[4]/div/div[2]/div[1]/div/div[5]/div/div/div[2]/div/span/input"))
+            press(ESCAPE)
+            sleep(1)
+            select(ComboBox(below="Link Shortening"), "Do Not Shorten")
+            sleep(3)
+        else:
+            upload_image = driver.find_element(By.XPATH, "//html/body/section[4]/div/div[2]/div[1]/div/div[2]/div[2]/div[3]/div/div/form/input")
+            image_path: str = compose_data["image_path"]
+            upload_image.send_keys(os.path.abspath(image_path))
+            wait_until(Text("Please be advised that the files you have uploaded will be available across the tenant").exists)
+            deployment_box = S("//html/body/section[4]/div/div[2]/div[1]/div/div[5]/div/div/div[1]/div")
+            click(deployment_box)
+            sleep(0.5)
+            schedule_from_ss_selection = S("//html/body/div[12]/div[2]/ul/li[2]")
+            click(schedule_from_ss_selection)
+            sleep(1)
+            # TODO: Make sure that passed date is in the future
+            write("01/02/2022", into=S("//html/body/section[4]/div/div[2]/div[1]/div/div[5]/div/div/div[2]/div/input"))
+            press(ESCAPE)
+            sleep(1)
+            # TODO: Make sure that passed time is in the future if the passed date is today
+            write("03:00 am", into=S("//html/body/section[4]/div/div[2]/div[1]/div/div[5]/div/div/div[2]/div/span/input"))
+            press(ESCAPE)
+            sleep(1)
+            select(ComboBox(below="Link Shortening"), "Do Not Shorten")
+            sleep(3)
 
-        # Create post as draft by default
         if as_draft:
             click("Save as a Draft")
 
-        # Get draft ID from compose page's URL and return it to client
+        new_draft_card = S("//html/body/section[6]/div[2]/div[1]/div[2]/div/div[2]")
         click(new_draft_card)
-        current_url: str = str(driver.current_url)
-        url_split: list = current_url.split("/")
+        draft_url: str = str(driver.current_url)
+        url_split: list = draft_url.split("/")
         draft_id: str = url_split.pop()
         # self.close_browser()
 
-        return draft_id
+        return draft_url, draft_id

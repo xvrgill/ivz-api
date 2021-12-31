@@ -1,6 +1,8 @@
 import pytest
 from api import app
 from flask import current_app
+import os
+import shutil
 
 # Test client used for functional tests
 @pytest.fixture
@@ -68,6 +70,17 @@ def test_data():
     }
 
     return passing_post_data, failing_post_data
+
+
+@pytest.fixture
+def image():
+    sample_image_path = os.path.abspath("tests/sample_files/graduation.jpg")
+    cached_image_path = os.path.abspath("images/graduation.jpg")
+    if os.path.isfile(cached_image_path):
+        return cached_image_path
+    else:
+        shutil.copy(sample_image_path, cached_image_path)
+        return cached_image_path
 
 
 # TODO: Implement the data below as required for testing by adding it to post data dictionary

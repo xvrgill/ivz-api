@@ -40,9 +40,17 @@ class TestLinkedinStrategy:
         passing_data, _ = test_data
         cache_path = LinkedInStrategy().cache_image(passing_data)
         assert type(cache_path) is str
+        LinkedInStrategy().rm_cached_image(cache_path)
 
     def test_cache_image_exists(self, test_data) -> None:
         """Test -- file should exist at cache path."""
         passing_data, _ = test_data
         cache_path = LinkedInStrategy().cache_image(passing_data)
         assert os.path.isfile(cache_path)
+        LinkedInStrategy().rm_cached_image(cache_path)
+
+    ### Tests for method: rm_cached_image() ###
+    def test_sample_image_exists(self, image):
+        assert os.path.isfile(image)
+        LinkedInStrategy().rm_cached_image(image)
+        assert os.path.isfile(image) == False

@@ -57,11 +57,11 @@ class SocialStudio(Resource):
                 # Initialize post context. Pass deserialized data and platform as string
                 ssc = SocialStudioPostContext(deserialized_data, "linkedin")
                 # Run context processing and store return values to add to final response
-                parsed_copy, image_path, draft_id = ssc.run()
+                parsed_copy, image_path, draft_url, draft_id = ssc.run()
 
                 # Assemble response to be passed back to the client
                 response_data["posts_created"] += 1
-                response_details: dict = {"us retail": {"copy": parsed_copy, "image_path": image_path, "draft_id": draft_id}}
+                response_details: dict = {"us retail": {"copy": parsed_copy, "image_path": image_path, "draft_url": draft_url, "draft_id": draft_id}}
                 response_data["created_posts"].update({"linkedin": [response_details]})
 
             #  Handle lower level errors

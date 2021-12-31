@@ -44,11 +44,11 @@ class SocialStudioPostContext:
         self.compose_data = dict(parsed_copy=parsed_copy, image_path=image_path)
         # compose post in social studio
         if self.compose_data:
-            draft_id = self.add_to_socialstudio()
+            draft_url, draft_id = self.add_to_socialstudio()
         # delete cached image
         self.rm_cached_image()
         # choose data to be returned
-        return (parsed_copy, image_path, draft_id)
+        return (parsed_copy, image_path, draft_url, draft_id)
 
 
 if __name__ == "__main__":

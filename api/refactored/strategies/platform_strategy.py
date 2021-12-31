@@ -108,9 +108,13 @@ class LinkedInStrategy(Strategy):
             self.image_cache_path = cache_path
             return cache_path
 
-    def rm_cached_image(self):
-        if os.path.isfile(self.image_cache_path):
-            os.remove(self.image_cache_path)
+    def rm_cached_image(self, path: str = None):
+        if path:
+            if os.path.isfile(path):
+                os.remove(path)
+        else:
+            if os.path.isfile(self.image_cache_path):
+                os.remove(self.image_cache_path)
 
     # TODO: Implement a method that adds the post data to database for later retrieval
     # def add_to_db(self):
@@ -120,7 +124,9 @@ class LinkedInStrategy(Strategy):
         scraper = SSScraper(compose_data, "linkedin")
         scraper.open_chrome()
         scraper.login()
-        return scraper.compose_post()
+        draft_url, draft_id = scraper.compose_post()
+        self.rm_cached_image()
+        return draft_url, draft_id
 
 
 class TwitterStrategy(Strategy):
