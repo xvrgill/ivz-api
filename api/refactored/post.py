@@ -1,5 +1,5 @@
 from api.refactored.exceptions import StrategyNotSupportedError
-from api.refactored.strategies.platform_strategy import LinkedInStrategy
+from api.refactored.strategies.platform_strategy import LinkedInStrategy, TwitterStrategy, FacebookStrategy, InstagramStrategy
 
 
 class SocialStudioPostContext:
@@ -12,6 +12,12 @@ class SocialStudioPostContext:
     def assign_strategy(self):
         if self.platform.lower() == "linkedin":
             return LinkedInStrategy()
+        elif self.platform.lower() == "twitter":
+            return TwitterStrategy()
+        elif self.platform.lower() == "facebook":
+            return FacebookStrategy()
+        elif self.platform.lower() == "instagram":
+            return InstagramStrategy()
         else:
             # Raise unsupported platform assigned error
             raise StrategyNotSupportedError(

@@ -3,9 +3,9 @@ import requests
 import regex
 from api.refactored.copy_parser import (
     LinkedInParser,
-    # TwitterParser,
-    # FacebookParser,
-    # InstagramParser,
+    TwitterParser,
+    FacebookParser,
+    InstagramParser,
 )
 from api.refactored.ss_scraper import SSScraper
 from abc import ABC, abstractmethod
@@ -26,13 +26,13 @@ class Strategy(ABC):
     def cache_image(self):
         pass
 
-    # @abstractmethod
-    # def add_to_db(self):
-    #     pass
+    @abstractmethod
+    def rm_cached_image(self):
+        pass
 
-    # @abstractmethod
-    # def add_to_socialstudio(self):
-    #     pass
+    @abstractmethod
+    def add_to_socialstudio(self):
+        pass
 
 
 class LinkedInStrategy(Strategy):
@@ -115,10 +115,6 @@ class LinkedInStrategy(Strategy):
         else:
             if os.path.isfile(self.image_cache_path):
                 os.remove(self.image_cache_path)
-
-    # TODO: Implement a method that adds the post data to database for later retrieval
-    # def add_to_db(self):
-    #     pass
 
     def add_to_socialstudio(self, compose_data: dict) -> str:
         scraper = SSScraper(compose_data, "linkedin")

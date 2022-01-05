@@ -51,27 +51,43 @@ class SocialStudio(Resource):
 
         social_channel_list = [x.lower() for x in deserialized_data["social_channel"]]
 
+        # TODO: Create loop that processes each indiviual post in existing record
+        # Need to separate by social channel, then by segment, then by post
+
+        for social_channel in social_channel_list:
+            if social_channel in ["linkedin", "twitter", "facebook"]:
+                ssc: SocialStudioPostContext = SocialStudioPostContext(deserialized_data, social_channel)
+                # Todo: Validate segments, post copy, and creative assets within the platform strategy (includes splitting posts)
+            elif social_channel == "instagram":
+                # Todo: If it is a carousel post, add to response as a skipped post
+                # Todo: Validate segments, post copy, and creative assets within the platform strategy (includes splitting posts)
+                pass
+            else:
+                # Todo: If social channel does not match above conditions, add to response as a skipped post
+                # Todo: Validate segments, post copy, and creative assets within the platform strategy (includes splitting posts)
+                pass
+
         # TODO: Create logic that enables the use of different brand strategies for each platform (eg. US Retail, CA Retail, US Institutional)
-        if "linkedin" in social_channel_list:
-            try:
-                # Initialize post context. Pass deserialized data and platform as string
-                ssc = SocialStudioPostContext(deserialized_data, "linkedin")
-                # Run context processing and store return values to add to final response
-                parsed_copy, image_path, draft_url, draft_id = ssc.run()
+        # if "linkedin" in social_channel_list:
+        #     try:
+        #         # Initialize post context. Pass deserialized data and platform as string
+        #         ssc = SocialStudioPostContext(deserialized_data, "linkedin")
+        #         # Run context processing and store return values to add to final response
+        #         parsed_copy, image_path, draft_url, draft_id = ssc.run()
 
-                # Assemble response to be passed back to the client
-                response_data["posts_created"] += 1
-                response_details: dict = {"us retail": {"copy": parsed_copy, "image_path": image_path, "draft_url": draft_url, "draft_id": draft_id}}
-                response_data["created_posts"].update({"linkedin": [response_details]})
+        #         # Assemble response to be passed back to the client
+        #         response_data["posts_created"] += 1
+        #         response_details: dict = {"us retail": {"copy": parsed_copy, "image_path": image_path, "draft_url": draft_url, "draft_id": draft_id}}
+        #         response_data["created_posts"].update({"linkedin": [response_details]})
 
-            #  Handle lower level errors
-            except RegexPatternResultError as e:
-                abort(422, error=f"{e.message}")
-            except StrategyNotSupportedError as e:
-                abort(400, error=f"{e.message}")
-            return jsonify(response_data)
-        else:
-            try:
-                raise ValueError()
-            except ValueError:
-                abort(400, message="linkedin not included in social channels selection in Air Table")
+        #     #  Handle lower level errors
+        #     except RegexPatternResultError as e:
+        #         abort(422, error=f"{e.message}")
+        #     except StrategyNotSupportedError as e:
+        #         abort(400, error=f"{e.message}")
+        #     return jsonify(response_data)
+        # else:
+        #     try:
+        #         raise ValueError()
+        #     except ValueError:
+        #         abort(400, message="linkedin not included in social channels selection in Air Table")

@@ -26,8 +26,8 @@ class LinkedInParser(CopyParser):
     Parser for LinkedIn. Parses copy and returns the platform specific substring of the full copy that was passed.
     """
 
-    def __init__(self, post_data) -> None:
-        self.post_data: str = post_data
+    def __init__(self, post_data: dict) -> None:
+        self.post_data = post_data
 
     def parse(self) -> str:
         # TODO: Need to filter out thought leader linkedin posts
@@ -65,12 +65,14 @@ class LinkedInParser(CopyParser):
 
 
 class TwitterParser(CopyParser):
+    """Parser for Twitter. Parses copy and returns the platform specific substring of the full copy that was passed.
 
-    """
-    Parser for Twitter. Parses copy and returns the platform specific substring of the full copy that was passed.
+    Args:
+        post_data (dict): Serialized data that contains social copy. Must contain key named "twitter_copy" and value containing copy as a string.
     """
 
-    pass
+    def __init__(self, post_data: dict) -> None:
+        self.post_data = post_data
 
 
 class FacebookParser(CopyParser):
